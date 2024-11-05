@@ -1,5 +1,4 @@
-﻿using CartaoProtegido.Repositories.DTOs;
-using MassTransit;
+﻿using MassTransit;
 using SagaJob.API.Sagas.StateMachine.Batch;
 using SagaJob.Contracts.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,7 +17,7 @@ namespace SagaJob.API.Sagas.StateMachine.Job
         public required string CurrentState { get; set; }
         //Iniciar sem o notmapped, mas talvez não faça sentido gravar todos os dados nessa propriedade
         [NotMapped]
-        public List<TokenDetails> TokenDetails { get; set; } = [];
+        //public List<TokenDetails> TokenDetails { get; set; } = [];
         public DateTime? StartedAt { get; set; }
         public DateTime? FinishedAt { get; set; }
         public BatchTypeEnum BatchType { get; set; }
