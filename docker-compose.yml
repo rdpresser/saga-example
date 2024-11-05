@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  sagajob.api:
+    image: ${DOCKER_REGISTRY-}sagajobapi
+    container_name: sagajob_api
+    restart: always
+    build:
+      context: .
+      dockerfile: src/SagaJob.API/Dockerfile
+
+  sagajob-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sagajob_database
+    hostname: mssql
+    ports:
+     - "1433:1433"
+    environment:
+      SA_PASSWORD: "sagajob@123"
+      MSSQL_PID: "Developer"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - "./data/:/var/opt/mssql/data/"
+      - "./log/:/var/opt/mssql/log/"
+      - "./secrets/:/var/opt/mssql/secrets/"
+
+  sagajob-mq:
+    image: rabbitmq:3-management
+    container_name: sagajob_mq
+    hostname: sagajob-mq
+    volumes:
+        - ./.containers/queue/data/:/var/lib/rabbitmq
+        - ./.containers/queue/log/:/var/log/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASS: guest
